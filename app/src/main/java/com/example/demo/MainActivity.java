@@ -70,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
+        // 动画与手势卡片点击事件
+        binding.cardAnimations.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Page3Activity.class);
+            startActivity(intent);
+        });
+        
         // 关于按钮点击事件
         binding.btnAbout.setOnClickListener(v -> {
             showAboutInfo();
