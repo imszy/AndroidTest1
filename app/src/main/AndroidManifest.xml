@@ -41,6 +41,39 @@
                 android:value=".MainActivity" />
         </activity>
         
+        <!-- 登录页面 -->
+        <activity 
+            android:name=".auth.LoginActivity"
+            android:label="登录"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        
+        <!-- 注册页面 -->
+        <activity 
+            android:name=".auth.RegisterActivity"
+            android:label="注册"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".auth.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".auth.LoginActivity" />
+        </activity>
+        
+        <!-- 个人中心页面 -->
+        <activity 
+            android:name=".auth.ProfileActivity"
+            android:label="个人中心"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        
     </application>
 
 </manifest> 

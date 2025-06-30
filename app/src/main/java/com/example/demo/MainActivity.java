@@ -3,17 +3,23 @@ package com.example.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.demo.auth.LoginActivity;
+import com.example.demo.auth.ProfileActivity;
 import com.example.demo.databinding.ActivityMainBinding;
+import com.example.demo.model.User;
+import com.example.demo.model.UserManager;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private ActivityMainBinding binding;
+    private UserManager userManager;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
             // 设置工具栏
             setSupportActionBar(binding.toolbar);
             
+            // 获取UserManager实例
+            userManager = UserManager.getInstance(this);
+            
             // 设置点击事件
             setupClickListeners();
             
@@ -35,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main); // 备用方案
             Toast.makeText(this, "初始化错误: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 刷新菜单以更新登录状态
+        invalidateOptionsMenu();
     }
     
     /**
@@ -60,10 +76,20 @@ public class MainActivity extends AppCompatActivity {
         
         // 浮动操作按钮点击事件
         binding.fab.setOnClickListener(v -> {
-            Snackbar.make(v, "这是一个演示用的浮动操作按钮", Snackbar.LENGTH_LONG)
-                    .setAction("确定", view -> {
-                        Toast.makeText(MainActivity.this, "你点击了确定", Toast.LENGTH_SHORT).show();
-                    }).show();
+            if (userManager.isLoggedIn()) {
+                // 已登录，显示用户信息
+                User user = userManager.getCurrentUser();
+                Snackbar.make(v, "当前用户: " + user.getNickname(), Snackbar.LENGTH_LONG)
+                        .setAction("个人中心", view -> {
+                            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                        }).show();
+            } else {
+                // 未登录，提示登录
+                Snackbar.make(v, "您尚未登录，请先登录", Snackbar.LENGTH_LONG)
+                        .setAction("登录", view -> {
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        }).show();
+            }
         });
     }
     
@@ -78,5 +104,41 @@ public class MainActivity extends AppCompatActivity {
                         "版本: 1.0")
                 .setPositiveButton("确定", null)
                 .show();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        
+        // 根据登录状态显示不同菜单项
+        MenuItem loginItem = menu.findItem(R.id.action_login);
+        MenuItem profileItem = menu.findItem(R.id.action_profile);
+        
+        if (userManager.isLoggedIn()) {
+            // 已登录，显示个人中心选项
+            loginItem.setVisible(false);
+            profileItem.setVisible(true);
+        } else {
+            // 未登录，显示登录选项
+            loginItem.setVisible(true);
+            profileItem.setVisible(false);
+        }
+        
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        
+        if (id == R.id.action_login) {
+            startActivity(new Intent(this, LoginActivity.class));
+            return true;
+        } else if (id == R.id.action_profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            return true;
+        }
+        
+        return super.onOptionsItemSelected(item);
     }
 } 

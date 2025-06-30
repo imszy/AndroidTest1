@@ -5,8 +5,11 @@ import android.content.Context;
 import android.util.Log;
 import androidx.multidex.MultiDex;
 
+import com.example.demo.model.UserManager;
+
 public class DemoApplication extends Application {
     private static final String TAG = "DemoApplication";
+    private static DemoApplication instance;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -18,6 +21,10 @@ public class DemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
+        
+        // 初始化 UserManager
+        UserManager.getInstance(this);
         
         // 设置全局未捕获异常处理器
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -31,5 +38,12 @@ public class DemoApplication extends Application {
         });
         
         Log.d(TAG, "DemoApplication initialized");
+    }
+    
+    /**
+     * 获取应用实例
+     */
+    public static DemoApplication getInstance() {
+        return instance;
     }
 } 
