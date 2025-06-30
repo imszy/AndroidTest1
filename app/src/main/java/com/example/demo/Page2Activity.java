@@ -178,7 +178,7 @@ public class Page2Activity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed(); // 处理返回按钮点击
+            finish(); // 处理返回按钮点击
             return true;
         }
         return super.onOptionsItemSelected(item);

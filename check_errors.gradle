@@ -1,0 +1,48 @@
+// This is a simple gradle script to check for compilation errors
+task checkCompilationErrors {
+    doLast {
+        println "Checking for compilation errors..."
+        
+        def sourceDir = new File("app/src/main/java")
+        def errors = []
+        
+        // Find all Java files
+        def javaFiles = []
+        sourceDir.eachFileRecurse { file ->
+            if (file.name.endsWith(".java")) {
+                javaFiles << file
+            }
+        }
+        
+        println "Found ${javaFiles.size()} Java files to check"
+        
+        // Check each Java file for common issues
+        javaFiles.each { file ->
+            def content = file.text
+            def fileName = file.name
+            
+            // Check for missing imports
+            if (content.contains("import android.view.View") && !content.contains("import android.view.View;")) {
+                errors << "${fileName}: Missing semicolon in import android.view.View"
+            }
+            
+            // Check for onBackPressed usage
+            if (content.contains("onBackPressed()")) {
+                errors << "${fileName}: Using deprecated onBackPressed() method"
+            }
+            
+            // Check for missing package declaration
+            if (!content.trim().startsWith("package ")) {
+                errors << "${fileName}: Missing package declaration"
+            }
+        }
+        
+        // Print errors
+        if (errors.isEmpty()) {
+            println "No common errors found!"
+        } else {
+            println "Found ${errors.size()} potential errors:"
+            errors.each { println "  - ${it}" }
+        }
+    }
+} 
