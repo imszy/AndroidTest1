@@ -51,6 +51,16 @@
                 android:value=".MainActivity" />
         </activity>
         
+        <activity 
+            android:name=".Page4Activity"
+            android:label="传感器与设备功能"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        
         <!-- 测试页面 -->
         <activity 
             android:name=".TestActivity"

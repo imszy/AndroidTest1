@@ -231,6 +231,54 @@
                                 </LinearLayout>
                             </LinearLayout>
                         </com.google.android.material.card.MaterialCardView>
+                        
+                        <!-- 传感器与设备功能 -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/card_sensors"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="2dp"
+                            app:strokeColor="@color/primary_light"
+                            app:strokeWidth="1dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="16dp">
+
+                                <ImageView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@mipmap/ic_launcher"
+                                    app:tint="@color/accent" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextSubtitle"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="传感器与设备功能"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="展示Android传感器和设备功能使用"
+                                        android:textColor="@color/secondary_text"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

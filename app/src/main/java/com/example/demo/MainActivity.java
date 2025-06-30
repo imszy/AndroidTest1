@@ -76,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
+        // 传感器与设备功能卡片点击事件
+        binding.cardSensors.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, Page4Activity.class);
+            startActivity(intent);
+        });
+        
         // 关于按钮点击事件
         binding.btnAbout.setOnClickListener(v -> {
             showAboutInfo();
