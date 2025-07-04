@@ -9,6 +9,14 @@
         <item name="android:textColorSecondary">@color/secondary_text</item>
     </style>
     
+    <!-- AppBar覆盖样式 -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+    
+    <!-- 弹出菜单覆盖样式 -->
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    
     <!-- 带ActionBar的主题 -->
     <style name="AppTheme.WithActionBar" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <item name="colorPrimary">@color/primary</item>
