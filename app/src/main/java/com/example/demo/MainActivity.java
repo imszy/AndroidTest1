@@ -99,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         
+        // API数据演示卡片点击事件
+        binding.cardApiDemo.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ApiDemoActivity.class);
+            startActivity(intent);
+        });
+        
         // 关于按钮点击事件
         binding.btnAbout.setOnClickListener(v -> {
             showAboutInfo();
