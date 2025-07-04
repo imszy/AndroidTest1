@@ -1,12 +1,34 @@
 # DemoApp
 
-这是一个最基础的 Android Demo 项目，包含一个简单的 Hello World 主界面。
+这是一个基础的 Android Demo 项目，包含多个功能演示页面，包括 UI 组件展示、列表数据、动画手势、传感器功能以及 API 数据获取演示。
 
 ## 项目特性
 - 最小 SDK 21，目标 SDK 34
 - 使用 Java 编写
 - 使用 Gradle 构建
 - 支持 GitHub Actions 云端自动构建，无需本地安装 Android 环境
+- 集成 Material Design 组件
+- 使用 Retrofit 和 OkHttp 进行网络请求
+- 使用 Gson 解析 JSON 数据
+- 使用 ViewBinding 简化视图操作
+
+## 功能模块
+
+### 主要功能
+- **UI组件展示**：展示各种 Android UI 组件的使用
+- **列表与数据**：展示 RecyclerView 列表和数据处理
+- **动画与手势**：展示 Android 动画和手势交互效果
+- **传感器与设备功能**：展示 Android 传感器和设备功能使用
+- **API数据演示**：展示如何从网络获取和展示 API 数据
+
+### API 数据演示
+API 演示页面通过 Retrofit 从 JSONPlaceholder 公共 API 获取数据并在 RecyclerView 中展示。主要功能：
+- 使用 Retrofit 进行 API 调用
+- 使用 OkHttp 拦截器记录网络请求日志
+- 使用 Gson 解析 JSON 响应
+- 使用 SwipeRefreshLayout 实现下拉刷新
+- 使用 RecyclerView 展示数据列表
+- 处理加载状态和错误情况
 
 ## 构建流程图
 
