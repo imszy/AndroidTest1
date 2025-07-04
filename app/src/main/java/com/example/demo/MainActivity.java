@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,6 +53,22 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // 刷新菜单以更新登录状态
         invalidateOptionsMenu();
+        // 更新登录状态显示
+        updateLoginStatusDisplay();
+    }
+    
+    /**
+     * 更新登录状态显示
+     */
+    private void updateLoginStatusDisplay() {
+        if (userManager.isLoggedIn()) {
+            User user = userManager.getCurrentUser();
+            binding.tvLoginStatus.setText("已登录: " + user.getNickname());
+            binding.btnLoginAction.setText("退出登录");
+        } else {
+            binding.tvLoginStatus.setText("未登录");
+            binding.btnLoginAction.setText("登录");
+        }
     }
     
     /**
@@ -85,6 +102,19 @@ public class MainActivity extends AppCompatActivity {
         // 关于按钮点击事件
         binding.btnAbout.setOnClickListener(v -> {
             showAboutInfo();
+        });
+        
+        // 登录/退出按钮点击事件
+        binding.btnLoginAction.setOnClickListener(v -> {
+            if (userManager.isLoggedIn()) {
+                // 已登录，执行退出操作
+                userManager.logout();
+                updateLoginStatusDisplay();
+                Toast.makeText(this, "已退出登录", Toast.LENGTH_SHORT).show();
+            } else {
+                // 未登录，跳转到登录页面
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
         });
         
         // 浮动操作按钮点击事件

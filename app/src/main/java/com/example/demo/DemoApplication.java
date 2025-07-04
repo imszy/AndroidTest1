@@ -10,6 +10,11 @@ import com.example.demo.model.UserManager;
 public class DemoApplication extends Application {
     private static final String TAG = "DemoApplication";
     private static DemoApplication instance;
+    
+    // Demo user credentials
+    private static final String DEMO_USERNAME = "demo";
+    private static final String DEMO_PASSWORD = "password";
+    private static final String DEMO_EMAIL = "demo@example.com";
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -24,7 +29,10 @@ public class DemoApplication extends Application {
         instance = this;
         
         // 初始化 UserManager
-        UserManager.getInstance(this);
+        UserManager userManager = UserManager.getInstance(this);
+        
+        // 确保demo账号存在
+        ensureDemoUserExists(userManager);
         
         // 设置全局未捕获异常处理器
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -38,6 +46,20 @@ public class DemoApplication extends Application {
         });
         
         Log.d(TAG, "DemoApplication initialized");
+    }
+    
+    /**
+     * 确保demo用户存在
+     */
+    private void ensureDemoUserExists(UserManager userManager) {
+        // 尝试使用demo账号登录，如果失败则创建账号
+        if (!userManager.login(DEMO_USERNAME, DEMO_PASSWORD)) {
+            // 创建demo账号
+            userManager.register(DEMO_USERNAME, DEMO_PASSWORD, DEMO_EMAIL);
+            Log.d(TAG, "Demo user created");
+        }
+        // 登出，确保应用启动时用户未登录
+        userManager.logout();
     }
     
     /**

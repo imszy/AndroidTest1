@@ -11,10 +11,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.demo.MainActivity;
 import com.example.demo.databinding.ActivityLoginBinding;
 import com.example.demo.model.UserManager;
+import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private UserManager userManager;
+    
+    // Demo credentials
+    private static final String DEMO_USERNAME = "demo";
+    private static final String DEMO_PASSWORD = "password";
+    private static final String DEMO_EMAIL = "demo@example.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +42,14 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // 确保demo账号存在
+        ensureDemoAccountExists();
+        
         // 设置点击事件
         setupClickListeners();
+        
+        // 显示demo账号信息
+        showDemoCredentials();
     }
 
     private void setupClickListeners() {
@@ -50,6 +62,28 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvRegister.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
+        
+        // 自动填充demo账号按钮
+        binding.btnDemoLogin.setOnClickListener(v -> {
+            binding.etUsername.setText(DEMO_USERNAME);
+            binding.etPassword.setText(DEMO_PASSWORD);
+        });
+    }
+    
+    private void ensureDemoAccountExists() {
+        // 如果demo账号不存在，创建一个
+        if (!userManager.login(DEMO_USERNAME, DEMO_PASSWORD)) {
+            userManager.register(DEMO_USERNAME, DEMO_PASSWORD, DEMO_EMAIL);
+        }
+    }
+    
+    private void showDemoCredentials() {
+        Snackbar.make(binding.getRoot(), "使用演示账号登录体验应用功能", Snackbar.LENGTH_LONG)
+                .setAction("填充", v -> {
+                    binding.etUsername.setText(DEMO_USERNAME);
+                    binding.etPassword.setText(DEMO_PASSWORD);
+                })
+                .show();
     }
 
     private void attemptLogin() {
