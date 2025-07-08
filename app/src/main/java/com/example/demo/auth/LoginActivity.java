@@ -6,16 +6,19 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.demo.MainActivity;
 import com.example.demo.databinding.ActivityLoginBinding;
 import com.example.demo.model.UserManager;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private UserManager userManager;
+    private boolean requireLogin = false;
     
     // Demo credentials
     private static final String DEMO_USERNAME = "demo";
@@ -28,9 +31,12 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // 检查是否需要强制登录
+        requireLogin = getIntent().getBooleanExtra("REQUIRE_LOGIN", false);
+
         // 初始化工具栏
         setSupportActionBar(binding.toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(!requireLogin);
 
         // 获取UserManager实例
         userManager = UserManager.getInstance(this);
@@ -50,6 +56,19 @@ public class LoginActivity extends AppCompatActivity {
         
         // 显示demo账号信息
         showDemoCredentials();
+        
+        // 如果需要强制登录，显示提示并处理返回按钮
+        if (requireLogin) {
+            Snackbar.make(binding.getRoot(), "请登录后继续使用应用", Snackbar.LENGTH_LONG).show();
+            
+            // 处理返回按钮
+            getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    showExitConfirmDialog();
+                }
+            });
+        }
     }
 
     private void setupClickListeners() {
@@ -120,11 +139,30 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
         }
     }
+    
+    /**
+     * 显示退出确认对话框
+     */
+    private void showExitConfirmDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("退出应用")
+                .setMessage("应用需要登录才能使用，确定要退出吗？")
+                .setPositiveButton("退出", (dialog, which) -> {
+                    // 结束所有Activity
+                    finishAffinity();
+                })
+                .setNegativeButton("取消", null)
+                .show();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            if (requireLogin) {
+                showExitConfirmDialog();
+            } else {
+                finish();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

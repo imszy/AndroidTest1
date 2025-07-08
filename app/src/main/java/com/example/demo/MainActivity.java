@@ -16,6 +16,7 @@ import com.example.demo.auth.ProfileActivity;
 import com.example.demo.databinding.ActivityMainBinding;
 import com.example.demo.model.User;
 import com.example.demo.model.UserManager;
+import com.example.demo.util.LoginChecker;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         invalidateOptionsMenu();
         // 更新登录状态显示
         updateLoginStatusDisplay();
+        
+        // 检查登录状态，如果未登录则跳转到登录页面
+        if (!userManager.isLoggedIn()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("REQUIRE_LOGIN", true);
+            startActivity(intent);
+        }
     }
     
     /**
@@ -77,32 +85,50 @@ public class MainActivity extends AppCompatActivity {
     private void setupClickListeners() {
         // UI组件展示卡片点击事件
         binding.cardUiComponents.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Page1Activity.class);
-            startActivity(intent);
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, Page1Activity.class);
+                startActivity(intent);
+            }
         });
         
         // 列表与数据卡片点击事件
         binding.cardListData.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Page2Activity.class);
-            startActivity(intent);
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, Page2Activity.class);
+                startActivity(intent);
+            }
         });
         
         // 动画与手势卡片点击事件
         binding.cardAnimations.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Page3Activity.class);
-            startActivity(intent);
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, Page3Activity.class);
+                startActivity(intent);
+            }
         });
         
         // 传感器与设备功能卡片点击事件
         binding.cardSensors.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, Page4Activity.class);
-            startActivity(intent);
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, Page4Activity.class);
+                startActivity(intent);
+            }
         });
         
         // API数据演示卡片点击事件
         binding.cardApiDemo.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ApiDemoActivity.class);
-            startActivity(intent);
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, ApiDemoActivity.class);
+                startActivity(intent);
+            }
+        });
+        
+        // 功能测试页面卡片点击事件
+        binding.cardTestPage.setOnClickListener(v -> {
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, TestPage2Activity.class);
+                startActivity(intent);
+            }
         });
         
         // 关于按钮点击事件
@@ -117,9 +143,13 @@ public class MainActivity extends AppCompatActivity {
                 userManager.logout();
                 updateLoginStatusDisplay();
                 Toast.makeText(this, "已退出登录", Toast.LENGTH_SHORT).show();
+                // 退出登录后重新检查登录状态
+                onResume();
             } else {
                 // 未登录，跳转到登录页面
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.putExtra("REQUIRE_LOGIN", true);
+                startActivity(intent);
             }
         });
         
@@ -136,7 +166,9 @@ public class MainActivity extends AppCompatActivity {
                 // 未登录，提示登录
                 Snackbar.make(v, "您尚未登录，请先登录", Snackbar.LENGTH_LONG)
                         .setAction("登录", view -> {
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            intent.putExtra("REQUIRE_LOGIN", true);
+                            startActivity(intent);
                         }).show();
             }
         });
@@ -181,7 +213,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         
         if (id == R.id.action_login) {
-            startActivity(new Intent(this, LoginActivity.class));
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("REQUIRE_LOGIN", true);
+            startActivity(intent);
             return true;
         } else if (id == R.id.action_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
