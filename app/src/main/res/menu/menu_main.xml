@@ -13,4 +13,11 @@
         android:title="个人中心"
         android:orderInCategory="101"
         app:showAsAction="never" />
+        
+    <item
+        android:id="@+id/action_settings"
+        android:title="设置"
+        android:orderInCategory="102"
+        android:icon="@android:drawable/ic_menu_preferences"
+        app:showAsAction="never" />
 </menu> 

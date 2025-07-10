@@ -12,6 +12,8 @@
 - 使用 Gson 解析 JSON 数据
 - 使用 ViewBinding 简化视图操作
 - 用户身份验证系统，需要登录才能使用功能
+- 测试模式支持，简化登录流程（仅需用户名）
+- 应用设置系统，支持多种配置选项
 
 ## 技术栈
 
@@ -49,12 +51,18 @@
 - **传感器与设备功能**：展示 Android 传感器和设备功能使用
 - **API数据演示**：展示如何从网络获取和展示 API 数据
 - **功能测试页面**：展示各种功能测试和交互效果
+- **设置页面**：提供应用配置选项和开发者选项
+- **电话功能**：提供输入电话号码并拨打电话的功能
 
 ### 用户身份验证
 - 应用需要登录才能使用所有功能
 - 提供了演示账号（用户名：demo，密码：password）
 - 支持用户注册和登录功能
 - 个人信息管理
+- 测试模式支持：
+  - 在测试阶段，仅需输入用户名即可登录（无需密码）
+  - 测试模式下会显示明显的指示器提示
+  - 可通过 UserManager 类控制测试模式的开启/关闭
 
 ### 页面详细功能
 
@@ -87,6 +95,8 @@
 - **距离传感器**：实时监测并显示物体与设备的距离
 - **电池信息**：显示设备当前电池状态
 - **设备信息**：显示设备型号、Android 版本等系统信息
+- **手电筒功能**：通过按钮控制手机闪光灯，实现手电筒功能
+- **NFC功能**：检测和读取NFC标签信息，显示标签ID和支持的技术
 
 #### API 数据演示 (ApiDemoActivity)
 - **网络请求**：使用 Retrofit 从 JSONPlaceholder 公共 API 获取数据
@@ -102,6 +112,17 @@
 - **状态切换**：测试UI元素的可见性切换
 - **延时操作**：演示延时任务的执行效果
 - **Toast提示**：展示Toast消息提示功能
+
+#### 设置页面 (SettingsActivity)
+- **应用设置**：
+  - 夜间模式切换：支持切换应用的明暗主题
+  - 通知设置：控制应用通知的开启/关闭
+- **开发者选项**：
+  - 测试模式控制：开启/关闭测试模式（影响登录验证）
+  - 详细日志记录：控制应用日志记录级别
+- **关于信息**：
+  - 版本信息：显示当前应用版本
+  - 检查更新：检查应用是否有新版本
 
 ## 构建流程图
 
@@ -133,9 +154,110 @@ graph TD
 
 ### 登录信息
 - 演示账号：demo
-- 密码：password
+- 密码：password（测试模式下无需输入）
 
 首次启动应用时，需要登录才能访问功能页面。可以使用上述演示账号，或者注册一个新账号。
+
+### 测试模式
+当前应用处于测试模式，登录时：
+- 只需输入用户名，无需输入密码
+- 密码输入框会自动隐藏
+- 界面会显示测试模式指示器
+- 正式版本发布前，测试模式将被关闭
+- 可以在设置页面中手动开启/关闭测试模式
+
+## 使用指南
+
+本应用包含多个功能模块，以下是详细的使用方法：
+
+### 1. 登录与注册
+1. **登录**：
+   - 启动应用后，如果未登录，将自动跳转到登录页面
+   - 输入用户名和密码（测试模式下只需用户名）
+   - 点击"登录"按钮进入主页面
+   
+2. **注册**：
+   - 在登录页面点击"注册新账号"
+   - 填写用户名、密码和昵称
+   - 点击"注册"按钮完成注册
+
+### 2. 主页面导航
+主页面展示了所有可用功能的卡片，点击相应卡片进入对应功能页面：
+- **UI组件展示**：查看各种Android UI控件
+- **列表与数据**：体验列表数据的展示和操作
+- **动画与手势**：体验各种动画效果
+- **传感器与设备功能**：使用设备传感器和硬件功能
+- **API数据演示**：查看网络API数据获取与展示
+- **功能测试页面**：测试各种功能
+- **设置页面**：调整应用配置
+- **电话功能**：拨打电话
+
+### 3. 传感器与设备功能使用
+1. **传感器数据**：
+   - 点击"加速度"、"光线"或"距离"按钮查看相应传感器数据
+   - 再次点击按钮停止监听
+   
+2. **设备信息**：
+   - 点击"设备信息"按钮查看设备详细信息
+   - 点击"电池信息"按钮查看电池状态
+   
+3. **手电筒功能**：
+   - 点击"打开手电筒"按钮开启手机闪光灯
+   - 再次点击关闭手电筒
+   - 首次使用时会请求相机权限
+   
+4. **NFC功能**：
+   - 点击"检测NFC标签"按钮开始监听NFC标签
+   - 将NFC标签靠近手机背面进行读取
+   - 应用将显示标签ID和支持的技术
+   - 如果NFC功能已关闭，应用会提示跳转到系统设置开启
+
+### 4. 电话功能使用
+1. **拨打电话**：
+   - 在输入框中输入电话号码
+   - 点击"拨打电话"按钮发起通话
+   - 首次使用时会请求拨打电话权限
+   
+2. **快速拨号**：
+   - 点击"紧急电话"、"联系人1"、"联系人2"或"联系人3"按钮
+   - 预设号码会自动填入输入框
+   - 点击"拨打电话"按钮发起通话
+   
+3. **通话记录**：
+   - 拨打电话后，通话记录会自动添加到页面底部
+   - 最多显示10条最近的通话记录
+
+### 5. 列表与数据操作
+1. **查看列表**：
+   - 上下滑动查看列表项
+   - 点击列表项显示详细信息
+   
+2. **添加数据**：
+   - 点击底部的"+"按钮添加新数据
+   
+3. **编辑与删除**：
+   - 长按列表项显示操作菜单
+   - 选择"编辑"或"删除"进行相应操作
+   
+4. **刷新数据**：
+   - 下拉列表进行刷新操作
+
+### 6. 设置页面
+1. **应用设置**：
+   - 切换夜间模式
+   - 开启/关闭通知
+   
+2. **开发者选项**：
+   - 开启/关闭测试模式
+   - 调整日志记录级别
+   
+3. **关于信息**：
+   - 查看版本信息
+   - 检查更新
+
+### 7. 退出登录
+- 在主页面点击"退出登录"按钮
+- 或在菜单中选择"退出登录"选项
 
 ---
 
@@ -144,23 +266,3 @@ graph TD
 ## 许可证
 
 MIT License
-
-Copyright (c) 2023
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. 

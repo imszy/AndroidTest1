@@ -22,6 +22,9 @@ public class UserManager {
     private Map<String, User> userDatabase; // In-memory user database for demo
     private User currentUser;
     
+    // 测试模式标志，在测试模式下不验证密码
+    private boolean testMode = true;
+    
     private UserManager(Context context) {
         this.context = context.getApplicationContext();
         this.userDatabase = new HashMap<>();
@@ -33,6 +36,23 @@ public class UserManager {
             instance = new UserManager(context);
         }
         return instance;
+    }
+    
+    /**
+     * Set test mode status
+     * @param enabled Whether test mode is enabled
+     */
+    public void setTestMode(boolean enabled) {
+        this.testMode = enabled;
+        Log.d(TAG, "Test mode " + (enabled ? "enabled" : "disabled"));
+    }
+    
+    /**
+     * Check if test mode is enabled
+     * @return true if test mode is enabled
+     */
+    public boolean isTestMode() {
+        return testMode;
     }
     
     /**
@@ -62,6 +82,16 @@ public class UserManager {
      */
     public boolean login(String username, String password) {
         User user = userDatabase.get(username);
+        
+        // 在测试模式下，只验证用户名存在，不验证密码
+        if (testMode && user != null) {
+            currentUser = user;
+            saveCurrentUser(username);
+            Log.d(TAG, "User logged in (test mode): " + username);
+            return true;
+        }
+        
+        // 正常模式下，验证用户名和密码
         if (user != null && user.getPassword().equals(password)) {
             currentUser = user;
             saveCurrentUser(username);

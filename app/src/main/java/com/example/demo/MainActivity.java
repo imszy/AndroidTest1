@@ -16,6 +16,7 @@ import com.example.demo.auth.ProfileActivity;
 import com.example.demo.databinding.ActivityMainBinding;
 import com.example.demo.model.User;
 import com.example.demo.model.UserManager;
+import com.example.demo.settings.SettingsActivity;
 import com.example.demo.util.LoginChecker;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -131,6 +132,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
+        // 设置页面卡片点击事件
+        binding.cardSettings.setOnClickListener(v -> {
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+        
+        // 电话页面卡片点击事件
+        binding.cardPhone.setOnClickListener(v -> {
+            if (LoginChecker.checkLogin(this)) {
+                Intent intent = new Intent(MainActivity.this, PhoneActivity.class);
+                startActivity(intent);
+            }
+        });
+        
         // 关于按钮点击事件
         binding.btnAbout.setOnClickListener(v -> {
             showAboutInfo();
@@ -219,6 +236,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
+            return true;
+        } else if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
         

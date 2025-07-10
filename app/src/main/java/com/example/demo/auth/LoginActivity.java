@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -51,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         // 确保demo账号存在
         ensureDemoAccountExists();
         
+        // 根据测试模式设置UI
+        updateUIForTestMode();
+        
         // 设置点击事件
         setupClickListeners();
         
@@ -71,6 +75,21 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void updateUIForTestMode() {
+        // 如果是测试模式，隐藏密码输入框并更新提示
+        if (userManager.isTestMode()) {
+            binding.tilPassword.setVisibility(View.GONE);
+            binding.testModeIndicator.setVisibility(View.VISIBLE);
+            binding.btnDemoLogin.setText("填充演示用户名");
+            binding.tvDemoPassword.setVisibility(View.GONE);
+        } else {
+            binding.tilPassword.setVisibility(View.VISIBLE);
+            binding.testModeIndicator.setVisibility(View.GONE);
+            binding.btnDemoLogin.setText("使用演示账号登录");
+            binding.tvDemoPassword.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setupClickListeners() {
         // 登录按钮点击事件
         binding.btnLogin.setOnClickListener(v -> {
@@ -85,7 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         // 自动填充demo账号按钮
         binding.btnDemoLogin.setOnClickListener(v -> {
             binding.etUsername.setText(DEMO_USERNAME);
-            binding.etPassword.setText(DEMO_PASSWORD);
+            if (!userManager.isTestMode()) {
+                binding.etPassword.setText(DEMO_PASSWORD);
+            }
         });
     }
     
@@ -97,10 +118,16 @@ public class LoginActivity extends AppCompatActivity {
     }
     
     private void showDemoCredentials() {
-        Snackbar.make(binding.getRoot(), "使用演示账号登录体验应用功能", Snackbar.LENGTH_LONG)
+        String message = userManager.isTestMode() ? 
+                "测试模式：只需输入用户名即可登录" : 
+                "使用演示账号登录体验应用功能";
+                
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG)
                 .setAction("填充", v -> {
                     binding.etUsername.setText(DEMO_USERNAME);
-                    binding.etPassword.setText(DEMO_PASSWORD);
+                    if (!userManager.isTestMode()) {
+                        binding.etPassword.setText(DEMO_PASSWORD);
+                    }
                 })
                 .show();
     }
@@ -108,11 +135,13 @@ public class LoginActivity extends AppCompatActivity {
     private void attemptLogin() {
         // 重置错误提示
         binding.tilUsername.setError(null);
-        binding.tilPassword.setError(null);
+        if (!userManager.isTestMode()) {
+            binding.tilPassword.setError(null);
+        }
 
         // 获取输入值
         String username = binding.etUsername.getText().toString().trim();
-        String password = binding.etPassword.getText().toString().trim();
+        String password = userManager.isTestMode() ? "" : binding.etPassword.getText().toString().trim();
 
         // 验证输入
         boolean cancel = false;
@@ -121,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
             cancel = true;
         }
 
-        if (TextUtils.isEmpty(password)) {
+        if (!userManager.isTestMode() && TextUtils.isEmpty(password)) {
             binding.tilPassword.setError("请输入密码");
             cancel = true;
         }
@@ -136,7 +165,11 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+            if (userManager.isTestMode()) {
+                Toast.makeText(this, "用户名不存在", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+            }
         }
     }
     

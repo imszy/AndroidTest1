@@ -175,8 +175,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp"
                             android:layout_weight="1"
                             android:text="电池信息" />
+                            
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_flashlight"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            android:text="打开手电筒" />
 
                     </LinearLayout>
 
@@ -200,6 +210,61 @@
                         android:background="@color/primary_light"
                         android:padding="12dp"
                         android:text="电池信息: 模拟数据\n电量: 85%\n状态: 正在充电\n温度: 30°C\n电压: 4.2V"
+                        android:textColor="@color/white"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- NFC功能卡片 -->
+            <androidx.cardview.widget.CardView
+                style="@style/CardStyle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/TextTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NFC功能" />
+
+                    <TextView
+                        style="@style/TextBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="近场通信(NFC)功能演示" />
+
+                    <!-- NFC状态显示 -->
+                    <TextView
+                        android:id="@+id/txt_nfc_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="正在检查NFC状态..."
+                        android:textColor="@color/secondary_text" />
+
+                    <!-- NFC按钮 -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_nfc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="检测NFC标签" />
+
+                    <!-- NFC数据显示区域 -->
+                    <TextView
+                        android:id="@+id/txt_nfc_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/primary_light"
+                        android:padding="12dp"
+                        android:text="等待NFC标签..."
                         android:textColor="@color/white"
                         android:visibility="gone" />
 

@@ -4,6 +4,19 @@
 
     <!-- 添加网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 添加相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 添加闪光灯权限 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <!-- 添加NFC权限 -->
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- 添加拨打电话权限 -->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 添加硬件功能声明 -->
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -93,6 +106,17 @@
                 android:value=".MainActivity" />
         </activity>
         
+        <!-- 设置页面 -->
+        <activity 
+            android:name=".settings.SettingsActivity"
+            android:label="设置"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        
         <!-- 登录页面 -->
         <activity 
             android:name=".auth.LoginActivity"
@@ -119,6 +143,17 @@
         <activity 
             android:name=".auth.ProfileActivity"
             android:label="个人中心"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        
+        <!-- 电话页面 -->
+        <activity 
+            android:name=".PhoneActivity"
+            android:label="拨打电话"
             android:theme="@style/AppTheme"
             android:parentActivityName=".MainActivity">
             <meta-data
